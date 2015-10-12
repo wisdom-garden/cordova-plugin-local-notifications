@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import de.appplant.cordova.plugin.localnotification.ClickActivity;
 
 import org.json.JSONObject;
 
@@ -134,6 +135,22 @@ public class Builder {
                 .setOngoing(options.isOngoing())
                 .setStyle(style)
                 .setLights(options.getLedColor(), 500, 500);
+
+        if (!options.getVibrate()) {
+            builder.setVibrate(new long[]{0l});
+        }
+
+        if (options.getOnlyAlertOnce()) {
+            builder.setOnlyAlertOnce(true);
+        }
+
+        int progress = options.getProgress();
+        if (progress >= 0) {
+            builder.setProgress(100, progress, false);
+        }
+        else {
+            builder.setProgress(0, 0, false);
+        }
 
         if (sound != null) {
             builder.setSound(sound);

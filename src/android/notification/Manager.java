@@ -81,6 +81,10 @@ public class Manager {
         return schedule(new Options(context).parse(options), receiver);
     }
 
+    public Notification notifi (JSONObject options, Class<?> receiver) {
+        return notifi(new Options(context).parse(options), receiver);
+    }
+
     /**
      * Schedule local notification specified by options object.
      *
@@ -95,6 +99,16 @@ public class Manager {
                 .build();
 
         notification.schedule();
+
+        return notification;
+    }
+
+    public Notification notifi (Options options, Class<?> receiver) {
+        Notification notification = new Builder(options)
+                .setTriggerReceiver(receiver)
+                .build();
+
+        notification.notifi();
 
         return notification;
     }
@@ -115,8 +129,6 @@ public class Manager {
         if (notification == null)
             return null;
 
-        notification.cancel();
-
         JSONObject options = mergeJSONObjects(
                 notification.getOptions().getDict(), updates);
 
@@ -125,6 +137,22 @@ public class Manager {
         } catch (JSONException ignore) {}
 
         return schedule(options, receiver);
+    }
+
+    public Notification updateNotify (int id, JSONObject updates, Class<?> receiver) {
+        Notification notification = get(id);
+
+        if (notification == null)
+            return null;
+
+        JSONObject options = mergeJSONObjects(
+                notification.getOptions().getDict(), updates);
+
+        try {
+            options.putOpt("updatedAt", new Date().getTime());
+        } catch (JSONException ignore) {}
+
+        return notifi(options, receiver);
     }
 
     /**

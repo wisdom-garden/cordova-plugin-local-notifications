@@ -253,7 +253,13 @@ public class Options {
         Uri uri = null;
 
         try{
-            uri = Uri.parse(options.optString("soundUri"));
+            String soundUri = options.optString("soundUri");
+            if ("" != soundUri) {
+                uri = Uri.parse(soundUri);
+            }
+            else {
+                return null;
+            }
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -291,6 +297,21 @@ public class Options {
         }
 
         return resId;
+    }
+
+    /**
+     * process of local notification.
+     */
+    public int getProgress () {
+        return options.optInt("progress", -1);
+    }
+
+    public Boolean getOnlyAlertOnce () {
+        return options.optBoolean("onlyAlertOnce", false);
+    }
+
+    public Boolean getVibrate () {
+        return options.optBoolean("vibrate", true);
     }
 
     /**

@@ -139,8 +139,16 @@ public class LocalNotification extends CordovaPlugin {
                     schedule(args);
                     command.success();
                 }
+                else if (action.equals("notify")) {
+                    notifi(args);
+                    command.success();
+                }
                 else if (action.equals("update")) {
                     update(args);
+                    command.success();
+                }
+                else if (action.equals("updateNotify")) {
+                    updateNotify(args);
                     command.success();
                 }
                 else if (action.equals("cancel")) {
@@ -222,6 +230,23 @@ public class LocalNotification extends CordovaPlugin {
     }
 
     /**
+     * Notify multiple local notifications.
+     *
+     * @param notifications
+     *      Properties for each local notification
+     */
+    private void notifi(JSONArray notifications) {
+        for (int i = 0; i < notifications.length(); i++) {
+            JSONObject options = notifications.optJSONObject(i);
+
+            Notification notification =
+                    getNotificationMgr().notifi(options, TriggerReceiver.class);
+
+            fireEvent("notify", notification);
+        }
+    }
+
+    /**
      * Update multiple local notifications.
      *
      * @param updates
@@ -236,6 +261,18 @@ public class LocalNotification extends CordovaPlugin {
                     getNotificationMgr().update(id, update, TriggerReceiver.class);
 
             fireEvent("update", notification);
+        }
+    }
+
+    private void updateNotify (JSONArray updates) {
+        for (int i = 0; i < updates.length(); i++) {
+            JSONObject update = updates.optJSONObject(i);
+            int id = update.optInt("id", 0);
+
+            Notification notification =
+                    getNotificationMgr().updateNotify(id, update, TriggerReceiver.class);
+
+            fireEvent("update_notify", notification);
         }
     }
 
@@ -534,6 +571,7 @@ public class LocalNotification extends CordovaPlugin {
      *      Optional local notification to pass the id and properties.
      */
     static void fireEvent (String event, Notification notification) {
+        System.out.println("[NOTIFICATION] FIRE " + event);
         String state = getApplicationState();
         String params = "\"" + state + "\"";
 

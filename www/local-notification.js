@@ -58,6 +58,10 @@ exports.schedule = function (opts, callback, scope) {
     this.core.schedule(opts, callback, scope);
 };
 
+exports.notify = function (opts, callback, scope) {
+    this.core.notify(opts, callback, scope);
+};
+
 /**
  * Update existing notifications specified by IDs in options.
  *
@@ -70,6 +74,10 @@ exports.schedule = function (opts, callback, scope) {
  */
 exports.update = function (opts, callback, scope) {
     this.core.update(opts, callback, scope);
+};
+
+exports.updateNotify = function (opts, callback, scope) {
+    this.core.updateNotify(opts, callback, scope);
 };
 
 /**

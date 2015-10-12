@@ -81,6 +81,25 @@ exports.schedule = function (opts, callback, scope) {
     }, this);
 };
 
+exports.notify = function (opts, callback, scope) {
+    this.registerPermission(function(granted) {
+
+        if (!granted)
+            return;
+
+        var notifications = Array.isArray(opts) ? opts : [opts];
+
+        for (var i = 0; i < notifications.length; i++) {
+            var properties = notifications[i];
+
+            this.mergeWithDefaults(properties);
+            this.convertProperties(properties);
+        }
+
+        this.exec('notify', notifications, callback, scope);
+    }, this);
+};
+
 /**
  * Update existing notifications specified by IDs in options.
  *
@@ -101,6 +120,18 @@ exports.update = function (opts, callback, scope) {
     }
 
     this.exec('update', notifications, callback, scope);
+};
+
+exports.updateNotify = function (opts, callback, scope) {
+    var notifications = Array.isArray(opts) ? opts : [opts];
+
+    for (var i = 0; i < notifications.length; i++) {
+        var properties = notifications[i];
+
+        this.convertProperties(properties);
+    }
+
+    this.exec('updateNotify', notifications, callback, scope);
 };
 
 /**

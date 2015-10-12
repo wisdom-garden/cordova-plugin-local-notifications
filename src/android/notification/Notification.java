@@ -163,6 +163,7 @@ public class Notification {
      */
     public void schedule() {
         long triggerTime = options.getTriggerTime();
+        System.out.println("[NOTIFICATION] SCHEDULE " + getId() + " " + options.toString());
 
         persist();
 
@@ -182,11 +183,20 @@ public class Notification {
         }
     }
 
+    public void notifi() {
+        System.out.println("[NOTIFICATION] NOTIFI " + getId() + " " + options.toString());
+
+        persist();
+
+        show();
+    }
+
     /**
      * Clear the local notification without canceling repeating alarms.
      *
      */
     public void clear () {
+        System.out.println("[NOTIFICATION] CLEAR " + getId());
         if (!isRepeating() && wasInThePast()) {
             unpersist();
         } else {
@@ -203,6 +213,7 @@ public class Notification {
      * method and cancel it.
      */
     public void cancel() {
+        System.out.println("[NOTIFICATION] CANCEL " + getId());
         Intent intent = new Intent(context, receiver)
                 .setAction(options.getIdStr());
 

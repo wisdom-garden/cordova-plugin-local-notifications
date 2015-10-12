@@ -38,7 +38,12 @@ exports._defaults = {
     id:    0,
     data:  undefined,
     every: undefined,
-    at:    undefined
+    at:    undefined,
+    progress:     -1,
+    ongoing:   false,
+    autoClear:  true,
+    onlyAlertOnce: false,
+    vibrate: true
 };
 
 // listener
